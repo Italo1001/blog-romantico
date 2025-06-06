@@ -1,0 +1,307 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto:wght@400;700&family=Dancing+Script:wght@400;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 0%; /* Black */
+  --foreground: 0 0% 100%; /* White */
+  --muted: 350 30% 15%; /* Dark red */
+  --muted-foreground: 350 15% 70%; /* Light pink */
+  --popover: 350 20% 10%; /* Dark red */
+  --popover-foreground: 0 0% 98%; /* White */
+  --card: 350 30% 5%; /* Very dark red */
+  --card-foreground: 0 0% 98%; /* White */
+  --border: 350 30% 18%; /* Dark red border */
+  --input: 350 30% 18%; /* Dark red input */
+  --primary: 350 70% 55%; /* Pink primary */
+  --primary-foreground: 0 0% 98%; /* White */
+  --secondary: 350 30% 15%; /* Dark red */
+  --secondary-foreground: 0 0% 98%; /* White */
+  --accent: 350 50% 40%; /* Accent pink */
+  --accent-foreground: 0 0% 98%; /* White */
+  --destructive: 0 84% 60%; /* Red */
+  --destructive-foreground: 60 9% 98%; /* White */
+  --ring: 350 70% 55%; /* Pink ring */
+  --radius: 0.5rem;
+  
+  /* Custom romantic colors */
+  --romantic-pink: 350 70% 55%; /* #d6336c */
+  --romantic-red: 350 85% 50%; /* #ff2a54 */
+  --romantic-dark: 350 100% 15%; /* #8B0000 */
+  --romantic-light: 350 100% 95%; /* #ffd6e8 */
+  --romantic-soft: 350 100% 85%; /* #ffccd5 */
+}
+
+.dark {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 98%;
+  --muted: 350 30% 15%;
+  --muted-foreground: 350 15% 70%;
+  --popover: 350 20% 10%;
+  --popover-foreground: 0 0% 98%;
+  --card: 350 30% 5%;
+  --card-foreground: 0 0% 98%;
+  --border: 350 30% 18%;
+  --input: 350 30% 18%;
+  --primary: 350 70% 55%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 350 30% 15%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 350 50% 40%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 350 70% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply font-sans antialiased text-white overflow-x-hidden;
+    font-family: 'Roboto', sans-serif;
+    scroll-behavior: smooth;
+    user-select: none;
+    background: linear-gradient(180deg, #000000 0%, #1a0000 50%, #000000 100%);
+    min-height: 100vh;
+  }
+  
+  body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer utilities {
+  .font-pacifico {
+    font-family: 'Pacifico', cursive;
+  }
+  
+  .font-dancing {
+    font-family: 'Dancing Script', cursive;
+  }
+  
+  .text-romantic-pink {
+    color: hsl(var(--romantic-pink));
+  }
+  
+  .text-romantic-red {
+    color: hsl(var(--romantic-red));
+  }
+  
+  .text-romantic-light {
+    color: hsl(var(--romantic-light));
+  }
+  
+  .text-romantic-soft {
+    color: hsl(var(--romantic-soft));
+  }
+  
+  .bg-romantic-pink {
+    background-color: hsl(var(--romantic-pink));
+  }
+  
+  .bg-romantic-red {
+    background-color: hsl(var(--romantic-red));
+  }
+  
+  .bg-romantic-dark {
+    background-color: hsl(var(--romantic-dark));
+  }
+  
+  .gradient-romantic {
+    background: linear-gradient(135deg, hsl(var(--romantic-pink)), hsl(var(--romantic-red)));
+  }
+  
+  .gradient-overlay {
+    background: linear-gradient(to bottom, #000000 0%, hsl(var(--romantic-dark)) 100%);
+  }
+  
+  .text-shadow-romantic {
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+  
+  .shadow-romantic {
+    box-shadow: 0 14px 34px hsl(var(--romantic-pink) / 0.6);
+  }
+  
+  .shadow-romantic-lg {
+    box-shadow: 0 20px 35px hsl(var(--romantic-dark) / 0.6);
+  }
+  
+  .backdrop-blur-romantic {
+    backdrop-filter: blur(10px);
+  }
+  
+  .heart-clip {
+    clip-path: polygon(50% 15%, 61% 15%, 70% 25%, 70% 40%, 50% 60%, 30% 40%, 30% 25%, 39% 15%);
+  }
+}
+
+/* Custom animations */
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 8px hsl(var(--romantic-pink) / 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px hsl(var(--romantic-pink) / 0.7);
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0px); 
+  }
+  50% { 
+    transform: translateY(-10px); 
+  }
+}
+
+@keyframes shimmer {
+  0% { 
+    transform: translateX(-100%) translateY(-100%) rotate(45deg); 
+  }
+  100% { 
+    transform: translateX(100%) translateY(100%) rotate(45deg); 
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { 
+    opacity: 0.3;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% { 
+    opacity: 1;
+    transform: scale(1.2) rotate(180deg);
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 5px hsl(var(--romantic-pink) / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px hsl(var(--romantic-pink) / 0.8), 
+                0 0 60px hsl(var(--romantic-red) / 0.6);
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 1.5s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 3s infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+.animate-modal-slide-in {
+  animation: modalSlideIn 0.3s ease;
+}
+
+/* Section spacing */
+.section {
+  min-height: 100vh;
+  padding: 6rem 1rem 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Timeline styles */
+.timeline::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  background: linear-gradient(to bottom, hsl(var(--romantic-pink)), hsl(var(--romantic-red)));
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  margin-left: -2px;
+  border-radius: 2px;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: hsl(var(--romantic-pink));
+  border: 4px solid #fff;
+  top: 15px;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.timeline-item:nth-child(odd) {
+  left: 0;
+}
+
+.timeline-item:nth-child(odd)::after {
+  right: -12px;
+}
+
+.timeline-item:nth-child(even) {
+  left: 50%;
+}
+
+.timeline-item:nth-child(even)::after {
+  left: -12px;
+}
+
+/* Mobile timeline adjustments */
+@media (max-width: 768px) {
+  .timeline::after {
+    left: 20px;
+  }
+  
+  .timeline-item {
+    width: 100% !important;
+    padding-left: 60px !important;
+    padding-right: 25px !important;
+  }
+  
+  .timeline-item::after {
+    left: 8px !important;
+  }
+  
+  .timeline-item:nth-child(even) {
+    left: 0 !important;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0.5rem 2rem;
+  }
+}

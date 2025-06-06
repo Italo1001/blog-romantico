@@ -1,166 +1,27 @@
-var __defProp = Object.defineProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-
 // server/index.ts
 import express2 from "express";
+import http from "http";
 
 // server/routes.ts
 import { createServer } from "http";
 
-// shared/schema.ts
-var schema_exports = {};
-__export(schema_exports, {
-  futurePlans: () => futurePlans,
-  futurePlansRelations: () => futurePlansRelations,
-  insertFuturePlanSchema: () => insertFuturePlanSchema,
-  insertMomentSchema: () => insertMomentSchema,
-  insertPhotoSchema: () => insertPhotoSchema,
-  insertQuoteSchema: () => insertQuoteSchema,
-  insertSongSchema: () => insertSongSchema,
-  insertTimelineEventSchema: () => insertTimelineEventSchema,
-  insertUserSchema: () => insertUserSchema,
-  moments: () => moments,
-  momentsRelations: () => momentsRelations,
-  photos: () => photos,
-  photosRelations: () => photosRelations,
-  quotes: () => quotes,
-  quotesRelations: () => quotesRelations,
-  songs: () => songs,
-  songsRelations: () => songsRelations,
-  timelineEvents: () => timelineEvents,
-  timelineEventsRelations: () => timelineEventsRelations,
-  users: () => users,
-  usersRelations: () => usersRelations
-});
-import { pgTable, text, serial, integer } from "drizzle-orm/pg-core";
-import { createInsertSchema } from "drizzle-zod";
-import { relations } from "drizzle-orm";
-var users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull()
-});
-var moments = pgTable("moments", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  date: text("date").notNull(),
-  icon: text("icon").notNull(),
-  userId: integer("user_id").notNull()
-});
-var photos = pgTable("photos", {
-  id: serial("id").primaryKey(),
-  url: text("url").notNull(),
-  caption: text("caption"),
-  userId: integer("user_id").notNull()
-});
-var timelineEvents = pgTable("timeline_events", {
-  id: serial("id").primaryKey(),
-  date: text("date").notNull(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  userId: integer("user_id").notNull()
-});
-var futurePlans = pgTable("future_plans", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  description: text("description").notNull(),
-  icon: text("icon").notNull(),
-  userId: integer("user_id").notNull()
-});
-var quotes = pgTable("quotes", {
-  id: serial("id").primaryKey(),
-  text: text("text").notNull(),
-  author: text("author").notNull(),
-  userId: integer("user_id").notNull()
-});
-var songs = pgTable("songs", {
-  id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  artist: text("artist").notNull(),
-  userId: integer("user_id").notNull()
-});
-var usersRelations = relations(users, ({ many }) => ({
-  moments: many(moments),
-  photos: many(photos),
-  timelineEvents: many(timelineEvents),
-  futurePlans: many(futurePlans),
-  quotes: many(quotes),
-  songs: many(songs)
-}));
-var momentsRelations = relations(moments, ({ one }) => ({
-  user: one(users, {
-    fields: [moments.userId],
-    references: [users.id]
-  })
-}));
-var photosRelations = relations(photos, ({ one }) => ({
-  user: one(users, {
-    fields: [photos.userId],
-    references: [users.id]
-  })
-}));
-var timelineEventsRelations = relations(timelineEvents, ({ one }) => ({
-  user: one(users, {
-    fields: [timelineEvents.userId],
-    references: [users.id]
-  })
-}));
-var futurePlansRelations = relations(futurePlans, ({ one }) => ({
-  user: one(users, {
-    fields: [futurePlans.userId],
-    references: [users.id]
-  })
-}));
-var quotesRelations = relations(quotes, ({ one }) => ({
-  user: one(users, {
-    fields: [quotes.userId],
-    references: [users.id]
-  })
-}));
-var songsRelations = relations(songs, ({ one }) => ({
-  user: one(users, {
-    fields: [songs.userId],
-    references: [users.id]
-  })
-}));
-var insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true
-});
-var insertMomentSchema = createInsertSchema(moments).omit({
-  id: true,
-  userId: true
-});
-var insertPhotoSchema = createInsertSchema(photos).omit({
-  id: true,
-  userId: true
-});
-var insertTimelineEventSchema = createInsertSchema(timelineEvents).omit({
-  id: true,
-  userId: true
-});
-var insertFuturePlanSchema = createInsertSchema(futurePlans).omit({
-  id: true,
-  userId: true
-});
-var insertQuoteSchema = createInsertSchema(quotes).omit({
-  id: true,
-  userId: true
-});
-var insertSongSchema = createInsertSchema(songs).omit({
-  id: true,
-  userId: true
-});
+// server/storage.ts
+import {
+  users,
+  moments,
+  photos,
+  timelineEvents,
+  futurePlans,
+  quotes,
+  songs
+} from "@shared/schema";
 
 // server/db.ts
 import dotenv from "dotenv";
 import { Pool, neonConfig } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-serverless";
 import ws from "ws";
+import * as schema from "@shared/schema";
 dotenv.config();
 neonConfig.webSocketConstructor = ws;
 if (!process.env.DATABASE_URL) {
@@ -169,7 +30,7 @@ if (!process.env.DATABASE_URL) {
   );
 }
 var pool = new Pool({ connectionString: process.env.DATABASE_URL });
-var db = drizzle({ client: pool, schema: schema_exports });
+var db = drizzle({ client: pool, schema });
 
 // server/storage.ts
 import { eq } from "drizzle-orm";
@@ -239,6 +100,14 @@ var DatabaseStorage = class {
 var storage = new DatabaseStorage();
 
 // server/routes.ts
+import {
+  insertMomentSchema,
+  insertPhotoSchema,
+  insertTimelineEventSchema,
+  insertFuturePlanSchema,
+  insertQuoteSchema,
+  insertSongSchema
+} from "@shared/schema";
 async function registerRoutes(app2) {
   app2.get("/api/moments/:userId", async (req, res) => {
     try {
@@ -368,27 +237,26 @@ import { createServer as createViteServer, createLogger } from "vite";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
+import { fileURLToPath } from "url";
 import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { cartographer } from "@replit/vite-plugin-cartographer";
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
 var vite_config_default = defineConfig({
   plugins: [
     react(),
     runtimeErrorOverlay(),
-    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [
-      await import("@replit/vite-plugin-cartographer").then(
-        (m) => m.cartographer()
-      )
-    ] : []
+    ...process.env.NODE_ENV !== "production" && process.env.REPL_ID !== void 0 ? [cartographer()] : []
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "client", "src"),
-      "@shared": path.resolve(import.meta.dirname, "shared"),
-      "@assets": path.resolve(import.meta.dirname, "attached_assets")
+      "@": path.resolve(__dirname, "client", "src"),
+      "@shared": path.resolve(__dirname, "shared")
     }
   },
-  root: path.resolve(import.meta.dirname, "client"),
+  root: "client",
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: "../dist/public",
     emptyOutDir: true
   },
   server: {
@@ -415,7 +283,7 @@ async function setupVite(app2, server) {
   const serverOptions = {
     middlewareMode: true,
     hmr: { server },
-    allowedHosts: true
+    allowedHosts: ["*"]
   };
   const vite = await createViteServer({
     ...vite_config_default,
@@ -502,16 +370,17 @@ app.use((req, res, next) => {
     res.status(status).json({ message });
     log(`Error: ${err.stack || err}`);
   });
+  const server = http.createServer(app);
   if (app.get("env") === "development") {
-    await setupVite(app);
+    await setupVite(app, server);
   } else {
     serveStatic(app);
   }
   const port = 5e3;
-  app.listen(port, () => {
-    log(`serving on port ${port}`);
+  server.listen(port, () => {
+    log(`Server listening on port ${port}`);
   });
-  app.on("error", (err) => {
+  server.on("error", (err) => {
     log(`Server error: ${err.message}`);
   });
 })();

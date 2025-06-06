@@ -4,13 +4,13 @@
   "type": "module",
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsx server/index.ts",
-    "build": "npx vite build && node scripts/build-server.js",
-    "start": "NODE_ENV=production node dist/index.js",
-    "check": "tsc",
-    "db:push": "drizzle-kit push",
-    "postinstall": "chmod +x node_modules/.bin/vite"
-  },
+  "dev": "cross-env NODE_ENV=development tsx server/index.ts",
+  "build": "npx vite build && node build-server.js",
+  "start": "NODE_ENV=production node dist/index.js",
+  "check": "tsc",
+  "db:push": "drizzle-kit push",
+  "postinstall": "chmod +x node_modules/.bin/vite"
+},
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",

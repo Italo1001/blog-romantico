@@ -1,14 +1,10 @@
-// scripts/build-server.js
-import { build } from 'esbuild'
+import esbuild from "esbuild";
 
-build({
-  entryPoints: ['server/index.ts'],
-  platform: 'node',
-  format: 'esm',
+esbuild.build({
+  entryPoints: ["server/index.ts"],
+  platform: "node",
+  packages: "external",
   bundle: true,
-  outdir: 'dist',
-  packages: 'external',
-}).catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+  format: "esm",
+  outdir: "dist"
+}).catch(() => process.exit(1));

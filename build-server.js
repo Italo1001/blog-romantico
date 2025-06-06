@@ -6,5 +6,5 @@ esbuild.build({
   packages: "external",
   bundle: true,
   format: "esm",
-  outdir: "dist"
+  outdir: "dist",
 }).catch(() => process.exit(1));
